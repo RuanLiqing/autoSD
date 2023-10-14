@@ -127,6 +127,8 @@ height = driver.execute_script("return screen.height;")
 
 driver.set_window_size(width/1.5, height)
 
+time.sleep(10)
+
 # 如果新文件夹不存在，则创建它
 if not os.path.exists(new_folder_path):
     os.makedirs(new_folder_path)
@@ -147,6 +149,7 @@ def extract_sentences_from_docx(file_path):
 
 #checkpoint
 driver.find_element(By.CSS_SELECTOR, "#setting_sd_model_checkpoint input.border-none").clear()
+time.sleep(2)
 driver.find_element(By.CSS_SELECTOR, "#setting_sd_model_checkpoint input.border-none").send_keys(checkpoint, Keys.ENTER)
 
 #负面提示词
@@ -172,14 +175,17 @@ if checkpoint not in checkpoints_without_refiner:
 
 # sampling steps
 driver.find_element(By.CSS_SELECTOR, '#txt2img_steps input[data-testid="number-input"]').clear()
+time.sleep(2)
 driver.find_element(By.CSS_SELECTOR, '#txt2img_steps input[data-testid="number-input"]').send_keys(sampling_steps)
     
 #text2img_width
 driver.find_element(By.CSS_SELECTOR, "#txt2img_width input[data-testid='number-input']").clear()
+time.sleep(2)
 driver.find_element(By.CSS_SELECTOR, "#txt2img_width input[data-testid='number-input']").send_keys(txt2img_width)
 
 #text2img_height
 driver.find_element(By.CSS_SELECTOR, "#txt2img_height input[data-testid='number-input']").clear()
+time.sleep(2)
 driver.find_element(By.CSS_SELECTOR, "#txt2img_height input[data-testid='number-input']").send_keys(txt2img_height)
 
  
@@ -216,8 +222,7 @@ try:
                 WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#txt2img_interrupt')))
                 break  # 如果按钮出现，退出循环
             except TimeoutException:
-                # 如果在10秒内按钮没有出现，模拟键盘输入command+enter
-                input_element.send_keys(sentence, Keys.COMMAND, Keys.ENTER)
+                actions.move_to_element(generate_button).click().perform()
 
         img_selector = 'img[data-testid="detailed-image"]'
         
