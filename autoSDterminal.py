@@ -187,7 +187,7 @@ for sentence in sentences:
 
     print("----" + previous_info)
 
-    time.sleep(1)
+    time.sleep(5)
 
 # 获取所有的png文件并排序
 all_images = [img for img in os.listdir(images_folder_path) if img.endswith('.png')]

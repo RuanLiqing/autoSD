@@ -13,6 +13,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from datetime import datetime
+from selenium.common.exceptions import TimeoutException
 
 
 #全局变量
@@ -198,6 +199,7 @@ print(sentences)
 info_div_selector = '#html_info_txt2img'
 previous_info = driver.find_element(by="css selector", value=info_div_selector).text
 previous_src = ""
+previous_link_href = ""
 
 try:
     for current_index, sentence in enumerate(sentences[start_index:], start=start_index):
@@ -231,11 +233,21 @@ try:
             current_src = img_element.get_attribute("src")
             return (webui_addr + "/file=") in current_src and current_src != previous_src
 
+        def link_changed(driver):
+            link_element = driver.find_element(By.CSS_SELECTOR, 'a[download="image"]')
+            current_link_href = link_element.get_attribute("href")
+            return (webui_addr + "/file=") in current_link_href and current_link_href != previous_link_href
+
+
         wait = WebDriverWait(driver, 300)  # 等待最多300秒
-        wait.until(image_src_changed)
+        try:
+            wait.until(image_src_changed)
+        except TimeoutException:
+            wait.until(link_changed)
 
         # 更新 previous_src 为当前图片的 src
         previous_src = driver.find_element(By.CSS_SELECTOR, img_selector).get_attribute("src")
+        previous_link_href = driver.find_element(By.CSS_SELECTOR, 'a[download="image"]').get_attribute("href")
 
         # 从previous_src中提取完整的图片路径
         old_img_path = previous_src.split("file=")[-1]
@@ -256,6 +268,11 @@ try:
         time.sleep(1)
 except (Exception, KeyboardInterrupt) as e:
     # 获取当前时间并格式化
+    print("发生异常！")
+    print(f"异常类型: {type(e)}")
+    print(f"异常消息: {str(e)}")
+    print("详细的堆栈信息：")
+    print(traceback.format_exc())  # 打印详细的堆栈跟踪信息
     current_time = datetime.now().strftime("断点%Y%m%d%H%M%S")
     exception_script_path = os.path.join(new_folder_path, current_time + ".py")
     with open(exception_script_path, "w") as f:

@@ -1,7 +1,8 @@
 import os
 import shutil
 
-def reorder_files_by_filename(source_folder, dest_folder):
+def reorder_files_by_filename(source_folder):
+    dest_folder = source_folder + "/Sbname"
     # 如果目标文件夹不存在，则创建
     if not os.path.exists(dest_folder):
         os.makedirs(dest_folder)
@@ -18,7 +19,9 @@ def reorder_files_by_filename(source_folder, dest_folder):
         new_name = os.path.join(dest_folder, f"{idx:05}{ext}")  # 格式化新名称为00000, 00001, ...
         shutil.copy(file, new_name)
 
-# 使用方法
-source_folder = "/Users/ruanliqing/autoSD/最后的真相/imagesSbtime"  # 替换为您的源图片文件夹路径
-dest_folder = source_folder + "Sbname"  # 替换为您想要存放重命名图片的新文件夹路径
-reorder_files_by_filename(source_folder, dest_folder)
+    return dest_folder
+
+# # 使用方法
+# source_folder = "/Users/ruanliqing/autoSD/最后的真相/imagesSbtime"  # 替换为您的源图片文件夹路径
+# dest_folder = source_folder + "Sbname"  # 替换为您想要存放重命名图片的新文件夹路径
+# reorder_files_by_filename(source_folder, dest_folder)
