@@ -1,6 +1,6 @@
 # import deepl
-import time
-from selenium import webdriver
+# import time
+# from selenium import webdriver
 
 # #----------------------------------------
 # #测试 文档翻译
@@ -11,11 +11,11 @@ from selenium import webdriver
 
 #----------------------------------------
 #测试自动化谷歌浏览器
-driver = webdriver.Firefox()
+# driver = webdriver.Firefox()
 
-driver.get('https://www.baidu.com')
+# driver.get('https://www.baidu.com')
 
-time.sleep(10)
+# time.sleep(10)
 
 
 
@@ -37,3 +37,5 @@ time.sleep(10)
 
 # for sentence in sentences[:10]:
 #     print(sentence)
+
+print(int(3.9))
